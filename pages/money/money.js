@@ -50,7 +50,6 @@ Page({
             that.setData({
               allMoney: res.data.data
             })
-            tips.success("提现成功！");
           } else {
             tips.alert(res.data.msg);
           }

@@ -39,11 +39,11 @@
                 <!--face  -->
                 <view class='li' wx:if="{{face}}">
                     <label>设置颜值口令</label>
-                    <picker bindchange="bindPickerChange4" value="{{index}}" range="{{face}}" class='lei img'>
-                          <image src='../images/img.png' mode='widthFix'></image>
+                    <picker bindchange="bindPickerChange4" value="{{index}}" range="{{faceList}}" class='lei img'>
+                        <image src='../images/img.png' mode='widthFix'></image>
                     </picker>
-                    <input type="text" wx:if="{{speakAll}}"  placeholder='' value='{{speak[shuo]}}' disabled></input>
-                    <input type="text" wx:else bindinput="speakmove" placeholder='' value='{{speakmove}}'></input>
+                    <input type="text" wx:if="{{options}}" placeholder='' value='{{faceList[yanzhi]}}' disabled></input>
+                    <input type="text" wx:else bindinput="face" placeholder='请输入文字' value=''></input>
                 </view>
                 <view class='little ques'>小伙伴们拼对{{leixing}}即可获得随机红包
                       <image src="../images/question-icon.png" mode="widthFix"></image>  
@@ -78,13 +78,8 @@
                  <form report-submit="true" bindsubmit="formSubmit" class="formSubmit">
                     <button class="submit button active" formType="submit">生成红包</button>
                 </form> 
-                <!--红包类型  -->
-                 <!-- <form report-submit="true" wx:for="{{typeP}}" bindtap='formSubmit' 
-                      data-type='{{item.typei}}' class="formSubmit button {{item.active?'active':'hide'}}">
-                      <button class="submit" formType="submit">{{item.red}}</button>
-                </form>   -->
                 <view class='pin'>
-                    <view class="type" bindtap='change' wx:for="{{typeP}}" 
+                    <view class="type" bindtap='change' wx:for="{{typeP}}" data-typei="{{item.typei}}"
                           data-index='{{index}}'>{{item.title}}</view>
                 </view>
             </view>

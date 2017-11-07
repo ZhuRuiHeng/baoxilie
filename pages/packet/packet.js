@@ -63,7 +63,7 @@ Page({
       let that = this;
       let bg_id = e.currentTarget.dataset.bg_id;
       wx.setStorageSync('bg_id', e.currentTarget.dataset.bg_id);
-      wx.navigateTo({
+      wx.navigateBack({
         url: '../share/share?red_id=' + that.data.red_id + '&bg_id=' + bg_id
       })
       console.log(bg_id);

@@ -1,6 +1,7 @@
 <view class="box">
     <view class='parent' wx:for="{{question}}">
-        <view class='title' bindtap='checked' data-index="{{index}}">
+        <view class='title' bindtap='checked' data-index="{{index}}" 
+              data-active="{{index==quesitionIndex?true:false}}">
             {{item.title}}</view>
         <view class='child'  
           wx:if="{{index==quesitionIndex?true:false}}">{{item.child}}          </view>

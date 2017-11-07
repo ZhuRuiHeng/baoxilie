@@ -120,7 +120,10 @@ Page({
     //当用户离开小程序时，此接口无法调用。
     wx.startRecord({
       success: function (res) {
-        wx.hideLoading() //录音
+        wx.showLoading({
+          title: '答案识别中',
+        });
+        //录音
         console.log('录音成功' + JSON.stringify(res));
         //上传语音文件至服务器
         wx.uploadFile({
@@ -163,13 +166,6 @@ Page({
                 let status = res.data.status;
                 if (status == 1) {
                   tips.alert('恭喜你');
-                  that.setData({
-                    finish: true,
-                    result: true,
-                    Tword: false,
-                    clear: true
-                  })
-
                   setTimeout(function () {
                     that.setData({
                       result: false,
@@ -181,13 +177,8 @@ Page({
                     url: '../index/index'
                   })
                 } else {
+                  console.log("语音：",res.data.msg);
                   tips.alert(res.data.msg);
-                  that.setData({
-                    // finish: true,
-                    // result: false,
-                    // Tword: false,
-                     clear: true
-                  })
                 }
               }
             })
@@ -227,6 +218,7 @@ Page({
     let that = this;
     let types = that.data.types;
     let count_down = that.data.red_info.count_down;
+    let sign = wx.getStorageSync('sign');
     console.log("count_down", count_down);
     if (count_down>0){
       var inter = setInterval(function () {
@@ -349,15 +341,20 @@ Page({
     console.log(e);
     let that = this;
     let index = e.currentTarget.dataset.index;
+    let pinimgIndex = e.currentTarget.dataset.index;
     let id = e.currentTarget.dataset.id;
     let _pinimgs = that.data._pinimgs;
     let idarr = [];
     console.log("id:", id);
+    console.log("pinimgIndex:", pinimgIndex);
+    console.log("index:", index);
     idarr.push(id);
     console.log(idarr);
     _pinimgs[id].pic;
     that.setData({
-      _pinimgs
+      _pinimgs,
+      pinimgIndex: pinimgIndex,
+      index:index
     })
     console.log("_pinimgs:", _pinimgs);
   },
@@ -506,7 +503,142 @@ Page({
     })
     wx.hideLoading()
   },
-  
+  phone: function () {
+    var that = this;
+    let sign = wx.getStorageSync('sign');
+    wx.chooseImage({
+      count: 1, // 默认9
+      sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+      success: function (res) {
+        var tempFilePaths = res.tempFilePaths
+        wx.uploadFile({ //上传图片
+          url: apiurl + "red/upload-image?sign=" + sign + ' & operator_id=' + app.data.kid,
+          data: {
+            file: tempFilePaths
+          },
+          filePath: tempFilePaths[0],
+          name: 'image',
+          formData: {
+            'user': 'test'
+          },
+          success: function (res) {
+            console.log(res);
+            let data = JSON.parse(res.data);
+            if (data.status == 1) {
+              tempFilePaths = data.data;
+              that.setData({
+                tempFilePaths: data.data
+              })
+              tips.alert('颜值评分中');
+              wx.request({
+                url: apiurl + "red/receive-red?sign=" + sign + '&operator_id=' + app.data.kid,
+                data: {
+                  red_id: that.data.red_id,
+                  content: that.data.tempFilePaths
+                },
+                header: {
+                  'content-type': 'application/json'
+                },
+                method: "GET",
+                success: function (res) {
+                 // wx.hideLoading()
+                  console.log("提交答案:", res);
+                  let status = res.data.status;
+                  if (status == 1) {
+                    tips.success('颜值爆棚');
+                    wx.showLoading({
+                      title: '加载中',
+                    });
+                    wx.request({
+                      url: apiurl + "red/red-detail?sign=" + sign + '&operator_id=' + app.data.kid,
+                      data: {
+                        red_id: that.data.red_id
+                      },
+                      header: {
+                        'content-type': 'application/json'
+                      },
+                      method: "GET",
+                      success: function (res) {
+                        console.log("红包详情:", res);
+                        that.setData({
+                          informList: res.data.data,
+                          member_info: res.data.data.member_info,
+                          receive_info: res.data.data.receive_info,
+                          red_info: res.data.data.red_info,
+                          red_status: res.data.data.red_status,
+                          types: res.data.data.red_info.red_type,
+                          count_down: res.data.data.red_info.count_down
+                        })
+                        console.log("types", that.data.types);
+                      }
+                    })
+                    wx.hideLoading()
+                  } else {
+                    tips.alert(res.data.msg);
+                  }
+                }
+              })
+            } else {
+              that.setData({
+                red_status: 'wait'
+              })
+              tips.alert(res.data.msg)
+            }
+
+          }
+        })
+      }
+    })
+  },
+  setting(){
+    this.setData({
+        can_set:true,
+        flag:1
+    })
+  },
+  quxiao(){
+    this.setData({
+      can_set: false,
+      flag:0
+    })
+  },
+  can_set(){
+    let that = this;
+    let sign = wx.getStorageSync('sign');
+    wx.request({
+      url: apiurl + "red/change-image-status?sign=" + sign + '&operator_id=' + app.data.kid,
+      data:{
+        r_id : that.data.r_id,
+        flag: that.data.flag	
+      },
+      header: {
+        'content-type': 'application/json'
+      },
+      method: "GET",
+      success: function (res) {
+        console.log("图片是否发起者可见:", res);
+        var status = res.data.status;
+        if (status == 1) {
+          tips.success("设置成功");
+          that.setData({
+            can_set: false
+          })
+
+        } else {
+          tips.alert(res.data.msg);
+        }
+      }
+    })
+  },
+  // 预览图片
+  nicephone(e) {
+    let nicephone = e.currentTarget.dataset.nicephone;
+    console.log(nicephone);
+    wx.previewImage({
+      current: 'nicephone', // 当前显示图片的http链接
+      urls: [''+nicephone+''] // 需要预览的图片http链接列表
+    })
+  },
   onShareAppMessage: function () {
 
   }

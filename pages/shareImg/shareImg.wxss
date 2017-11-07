@@ -2,13 +2,13 @@
 .box{
   text-align: center;
   width: 90%;
-  margin: 0 auto;
+  margin: 30rpx auto;
 }
-.box .img{
+.box .img,.box .img image{
   width: 100%;
 }
 .box .save{
-   width:100%;
+  width:100%;
   margin: 30rpx auto;
   border-width:1px;
   font-size:28rpx;

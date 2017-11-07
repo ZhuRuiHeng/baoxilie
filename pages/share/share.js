@@ -22,14 +22,16 @@ Page({
     });
     let that = this;
     console.log(options);
-    if (options.bg_id) {  //有无bg_id
-      this.setData({
-        bg_id: options.red_id
-      })
-      bg_id: options.bg_id
-    }
+    let bg_id = wx.getStorageSync("bg_id");
+    // if (options.bg_id) {  //有无bg_id
+    //   this.setData({
+    //     bg_id: options.red_id
+    //   })
+    //   bg_id: options.bg_id
+    // }
     that.setData({
-      red_id: options.red_id
+      red_id: options.red_id,
+      bg_id: bg_id
     })
     wx.hideLoading()
   },
@@ -40,11 +42,26 @@ Page({
   onReady: function () {
   
   },
-
+  // 换壳
+  change(e) {
+    wx.navigateTo({
+      url: '../packet/packet?red_id=' + this.data.red_id
+    })
+    console.log(e);
+  },
+  shareImg(e) {
+    wx.navigateTo({
+      url: '../shareImg/shareImg?bg_id=' + this.data.bg_id + '&red_id=' + this.data.red_id
+    })
+    console.log(e);
+  },
   /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    wx.showLoading({
+      title: '加载中',
+    });
     let that = this;
     let sign = wx.getStorageSync('sign');
     console.log(that.data.red_id);
@@ -81,19 +98,9 @@ Page({
         wx.setStorageSync('imgUrl', res.data.data);
       }
     })
-    
+    wx.hideLoading()
   },
-  // 换壳
-  change(){
-    wx.navigateTo({
-      url: '../packet/packet?red_id=' + this.data.red_id
-    })
-  },
-  shareImg(e) {
-    wx.navigateTo({
-      url: '../shareImg/shareImg?bg_id=' + this.data.bg_id + '&red_id=' + this.data.red_id
-    })
-  },
+
  
 
   /**

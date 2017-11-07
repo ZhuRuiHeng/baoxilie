@@ -3,27 +3,6 @@
   width: 100%;
   background: #f5f5f5;
 }
-.container .box{
-    transition: 1s;
-    position: relative;
-    padding-bottom: 72px;
-    transform: rotateY(0deg);
-    transform-style: preserve-3d;
-    width: 90%;
-    margin: 60rpx auto;
-    background: #fff;
-    box-sizing: border-box;
-    padding: 0 14rpx;
-    border-radius:20rpx;
-    background-color: #fff;
-    box-shadow: 0 5rpx 10rpx rgba(0,0,0,.21);  
-}
-
-.container .boxs{
-    transition: 1s; position: relative; padding-bottom: 72px; margin: 57px 28px 0; 
-    transform: rotateY(0deg);    transform-style: preserve-3d; 
-  transform: rotateY(720deg);
-}
 @keyframes weuiLoading {
   0% {
     -webkit-transform: rotate3d(0, 0, 1, 0deg);
@@ -32,6 +11,26 @@
     -webkit-transform: rotate3d(0, 0, 1, 360deg);
   }
 }
+.container .box{
+    transition: 1s;
+    position: relative;
+    padding-bottom: 72px;
+    width: 100%;
+    margin: 60rpx auto;
+    background: #fff;
+    box-sizing: border-box;
+    padding: 0 24rpx;
+    border-radius:20rpx;
+    background-color: #fff;
+    box-shadow: 0 5rpx 10rpx rgba(0,0,0,.21);  
+}
+
+.container .boxs{
+    transition: 1s; position: relative; padding-bottom: 72px; margin: 57px 28px 0; 
+    transform: rotateY(0deg);    transform-style: preserve-3d; 
+   transform: rotateY(720deg);
+}
+
 .container .boxs.animation{
   transform: rotateY(360deg);
   -webkit-transform: rotateY(360deg);	/* Safari 和 Chrome */
@@ -143,7 +142,6 @@ view .button{
 }
 .pin view{
   flex: 1;
-  cursor: pointer;
 }
 .tiaozhan{
   background: url(http://ovhvevt35.bkt.clouddn.com/pin/right.png) no-repeat center right;
@@ -192,7 +190,10 @@ input {
 }
 .bottom{
   width: 100%;
-  position: absolute;
+  position: fixed;
   left: 0;
   bottom: 0;
+}
+.formSubmit{
+  display: block;
 }

@@ -14,6 +14,7 @@ Page({
     array: ['30秒', '5秒', '10秒', '15秒', '20秒', '30秒', '40秒', '50秒', '60秒'],
     textList: ['请输入文字','大吉大利，今晚吃鸡', '升职加薪总经理，走上人生巅峰~', '科学研究明表汉怎字序排不也影响阅读', '生日快乐~'],
     speak: ['我爱你', '我喜欢你', '我是逗比', '我是猪'],
+    faceList:['听说好看的人手气都不差','比一比谁的颜值最高','有颜值才能领取的福利','我想看看你们的颜值有多高'],
     service:0,//服务费
     allmoney:'',//余额
     animation:false,
@@ -35,7 +36,8 @@ Page({
         typei: "voice",
         red: '生成口令红包',
         active: false
-      }, {
+      }
+      , {
         title: '颜值红包',
         typei: "face",
         red: '生成颜值红包',
@@ -87,8 +89,8 @@ Page({
     if (style){
       that.setData({
           style: style,
-          text: false, //文字
-          img: true, //图片
+          text: true, //文字
+          img: false, //图片
           voice: false, //语音
           face: false
       })
@@ -105,6 +107,7 @@ Page({
     // 用户信息
     let that = this;
     let userInfo = wx.getStorageSync('userInfo');
+    let sign = wx.getStorageSync('sign');
     that.setData({
       userInfo: userInfo
     })
@@ -155,14 +158,14 @@ Page({
   change(e){
     let that = this;
     let index = e.currentTarget.dataset.index;
+    let typei = e.currentTarget.dataset.typei;
     let typeP = that.data.typeP;
     that.setData({
-      animation: !that.data.animation
+      animation: true
     })
-    if (index == 3){ //期待
-      tips.alert("敬请期待！");
-    }
-    if(index==1){
+    console.log(that.data.animation);
+    
+    if (typei == 'img'){
       wx.setStorageSync('style', 'img');
       that.setData({
         text: false, //文字
@@ -171,7 +174,7 @@ Page({
         face: false,
         style:'img'
       })
-    } else if (index == 2){
+    } else if (typei == 'voice'){
       wx.setStorageSync('style', 'voice');
       that.setData({
         text: false, //文字
@@ -180,7 +183,7 @@ Page({
         face: false,
         style: 'voice'
       })
-    } else if (index == 3) {
+    } else if (typei == 'face') {
       wx.setStorageSync('style', 'face');
       that.setData({
         text: false, //文字
@@ -189,7 +192,7 @@ Page({
         face: true,
         style: 'face'
       })
-    } else if (index == 0) {
+    } else if (typei == 'text'){
       wx.setStorageSync('style', 'text');
       that.setData({
         text: true, //文字
@@ -201,8 +204,9 @@ Page({
     }
     setTimeout(function(){
       that.setData({
-        animation: !that.data.animation
+        animation: false
       })
+      console.log(that.data.animation);
     },2000)
     for (let i = 0; i < typeP.length;i++){
       typeP[i].active = false;
@@ -254,7 +258,7 @@ Page({
           console.log("play拼:", play);
           console.log(parseFloat(that.data.money1) + parseFloat(that.data.service));
           inform = {
-            money: parseFloat(that.data.money1) + parseFloat(that.data.service),
+            money: that.data.money1,
             count: that.data.num,
             content: that.data.word,
             form_id: form_id + Math.random() * 10 + 1,
@@ -273,7 +277,7 @@ Page({
           console.log("play普:", play);
           console.log(parseFloat(that.data.money1) + parseFloat(that.data.service));
           inform = {
-            money: parseFloat(that.data.money2 * that.data.num) + parseFloat(that.data.service),
+            money: that.data.money2 * that.data.num,
             count: that.data.num,
             content: that.data.word,
             form_id: form_id + Math.random() * 10 + 1,
@@ -368,7 +372,7 @@ Page({
         }
         console.log("play拼:", play);
         inform = {
-          money: parseFloat(that.data.money1) + parseFloat(that.data.service),
+          money: that.data.money1,
           count: that.data.num,
           content: that.data.tempFilePaths,
           form_id: form_id + Math.random() * 10 + 1,
@@ -386,7 +390,7 @@ Page({
           return false;
         }
         inform = {
-          money: parseFloat(that.data.money2 * that.data.num) + parseFloat(that.data.service),
+          money: that.data.money2 * that.data.num,
           count: that.data.num,
           content: that.data.tempFilePaths,
           form_id: form_id + Math.random() * 10 + 1,
@@ -463,8 +467,7 @@ Page({
           }
         }
       })
-    }
-    else if (style == 'voice') { //语音红包
+    }else if (style == 'voice') { //语音红包
       let play = that.data.play;
       if (!that.data.shuo && !that.data.speakmove) {
         tips.alert("您没有设置口令");
@@ -478,7 +481,7 @@ Page({
         }
         console.log("play拼:", play);
         inform = {
-          money: parseFloat(that.data.money1) + parseFloat(that.data.service),
+          money: that.data.money1,
           count: that.data.num,
           content: that.data.speakmove,
           form_id: form_id + Math.random() * 10 + 1,
@@ -492,7 +495,7 @@ Page({
           return false;
         }
         inform = {
-          money: parseFloat(that.data.money2 * that.data.num) + parseFloat(that.data.service),
+          money: that.data.money2 * that.data.num,
           count: that.data.num,
           content: that.data.speakmove,
           form_id: form_id + Math.random() * 10 + 1,
@@ -570,17 +573,139 @@ Page({
         }
       })
       
+    } else if (style == 'face'){
+      let play = that.data.play;
+      console.log(that.data.word, that.data.wenzi);
+      if (!that.data.face && !that.data.yanzhi) {
+        tips.alert("您没有设置文字");
+        return false;
+      }
+      // 玩法
+      if (play == true) {
+        if (!that.data.money1) {
+          tips.alert("您没有填写金额");
+          return false;
+        }
+        if (that.data.money1 < that.data.num) {
+          tips.alert("每人获得打赏不得低于1元");
+          return false;
+        }
+        console.log("play拼:", play, that.data.face);
+        inform = {
+          money: that.data.money1,
+          count: that.data.num,
+          content: that.data.faces,
+          form_id: form_id + Math.random() * 10 + 1,
+          type: 'random',
+          count_down: that.data.count_down
+        }
+      } else {
+        console.log("play普:", play, that.data.faces);
+        if (!that.data.money2) {
+          tips.alert("您没有填写金额");
+          return false;
+        }
+        if (that.data.money2 < 1) {
+          tips.alert("每人获得打赏不得低于1元");
+          return false;
+        }
+        inform = {
+          money: that.data.money2 * that.data.num,
+          count: that.data.num,
+          content: that.data.faces,
+          form_id: form_id + Math.random() * 10 + 1,
+          type: 'average',
+          count_down: that.data.count_down
+        }
+      }
+      //颜值
+      wx.request({
+        url: apiurl + "red/create-facepk-red?sign=" + sign + '&operator_id=' + app.data.kid,
+        data: inform,
+        header: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        method: "POST",
+        success: function (res) {
+          console.log("颜值红包:", res);
+          if (res.data.status == '1') {
+            if (res.data.data.finished == false) {//余额不足 
+              let params = res.data.data.params;
+              // 调用支付
+              wx.requestPayment({
+                timeStamp: res.data.data.params.timeStamp,
+                nonceStr: res.data.data.params.nonceStr,
+                package: res.data.data.params.package,
+                signType: res.data.data.params.signType,
+                paySign: res.data.data.params.paySign,
+                'success': function (res) {
+                  // 获取red_id
+                  wx.request({
+                    url: apiurl + "red/go-new-red-detail?sign=" + sign + '&operator_id=' + app.data.kid,
+                    header: {
+                      'content-type': 'application/json'
+                    },
+                    method: "GET",
+                    success: function (res) {
+                      console.log("红包详情:", res);
+                      console.log(res.data.data);
+                      that.setData({
+                        red_id: res.data.data,
+                        monry1: '',
+                        money2: '',
+                        num: ''
+                      })
+                    }
+                  })
+                  setTimeout(function () {
+                    // 微信支付成功跳转
+                    wx.navigateTo({
+                      url: '../inform/inform?red_id=' + that.data.red_id
+                    })
+                  }, 300)
+                },
+                fail: function (res) {
+                  console.log(res);
+                  tips.error(res.data.msg);
+                }
+              })
+            } else {
+              tips.loading("创建成功");
+              that.setData({
+                monry1: '',
+                money2: '',
+                num: ''
+              }),
+                // 余额支付成功跳转
+                wx.navigateTo({
+                  url: '../inform/inform?red_id=' + res.data.data.finished
+                })
+            }
+
+          } else {
+            tips.alert(res.data.msg)
+          }
+        }
+      })
     }
-    wx.setStorageSync('style', '');
+    //wx.setStorageSync('style', '');
   },
   //事件处理函数text
   bindPickerChange1: function (e) {
-    console.log('picker发送选择改变，携带值为', e.detail.value)
+    console.log('picker发送选择改变，携带值为', e.detail.value);
+    console.log(this.data.textList[e.detail.value]);
     this.setData({
       wenzi: e.detail.value,
       word: this.data.textList[e.detail.value],
       options: true
     })
+  },
+  // 文字
+  word(e) {
+    this.setData({
+      word: e.detail.value
+    })
+    console.log("word:", e.detail.value);
   },
   //事件处理函数array
   bindPickerChange2: function (e) {
@@ -598,6 +723,24 @@ Page({
       speakAll: true
     })
   },
+  // 事件处理函数face颜值口令
+  bindPickerChange4: function (e) {
+    console.log('picker发送选择改变，携带值为', e.detail.value);
+    console.log(this.data.faceList[e.detail.value]);
+    this.setData({
+      yanzhi: e.detail.value,
+      faces: this.data.faceList[e.detail.value],
+      options: true
+    })
+  },
+  // face
+  face(e) {
+    this.setData({
+      faces: e.detail.value
+    })
+    console.log("faces:", e.detail.value);
+  },
+  
   // 语音口令
   speakmove(e) {
     this.setData({
@@ -608,12 +751,6 @@ Page({
   seeImg: function () {
     wx.navigateTo({
       url: '../niceimg/niceimg'
-    })
-  },
-  // 文字
-  word(e) {
-    this.setData({
-      word: e.detail.value
     })
   },
   // 总金额  拼
@@ -679,6 +816,6 @@ Page({
         })
       }
     })
-  },
+  }
 
 })

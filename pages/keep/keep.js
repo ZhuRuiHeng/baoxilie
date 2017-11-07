@@ -29,7 +29,7 @@ Page({
   // 详情
   inform(e){
     let red_id = e.currentTarget.dataset.red_id;
-    wx.navigateTo({
+    wx.redirectTo({
       url: '../inform/inform?red_id=' + red_id
     })
   },

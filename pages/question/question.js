@@ -76,9 +76,17 @@ Page({
   },
   checked(e) {
     let that = this;
-    console.log(e)
     let quesitionIndex = e.currentTarget.dataset.index;
+    let index = e.currentTarget.dataset.index;
+    let active = e.currentTarget.dataset.active;
+    console.log(active);
+    let question = that.data.question;
+    if (active==true){
+      console.log(question[index].active);
+      question[index].active=false
+    }
     that.setData({
+      question,
       quesitionIndex
     })
   }

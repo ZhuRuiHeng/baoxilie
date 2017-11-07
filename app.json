@@ -1,5 +1,6 @@
 {
   "pages":[
+    "pages/star/star",
     "pages/index/index",
     "pages/money/money",
     "pages/question/question",
@@ -9,7 +10,8 @@
     "pages/share/share",
     "pages/shareImg/shareImg",
     "pages/packet/packet",
-    "pages/star/star"
+    "pages/demo/demo"
+    
   ],
   "window":{
     "backgroundTextStyle":"light",

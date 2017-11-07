@@ -1,0 +1,140 @@
+<!--pages/demo/demo.wxml-->
+<view>
+	<view class="">
+		<image src="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLL9GsXvL5j1b97PReWNMfQjtialicgicGHHRazqZIXMQdw2CE1MHf7xCyBIf5JSJcwxkFRRdvlQOh3g/0"
+		class="head-pic">
+			<view style="background-image: url('https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLL9GsXvL5j1b97PReWNMfQjtialicgicGHHRazqZIXMQdw2CE1MHf7xCyBIf5JSJcwxkFRRdvlQOh3g/0'); background-size: 100% 100%; background-repeat: no-repeat;">
+			</view>
+			<virtual>
+			</virtual>
+		</image>
+		<view class="name">
+			远航
+		</view>
+		<view class="target-pic">
+			<image src="https://img.2gengmei.com//tmp_b9ae8f3a142d86e7d0c3136957ae164a.jpg">
+				<view style="background-image: url('https://img.2gengmei.com//tmp_b9ae8f3a142d86e7d0c3136957ae164a.jpg'); background-size: 100% 100%; background-repeat: no-repeat;">
+				</view>
+				<virtual>
+				</virtual>
+			</image>
+			<view style=" background: url(https://img.xmeizhuang.com/XCX/order/magnifier.png) center center no-repeat rgba(0,0,0,.5); background-size: 15px auto;">
+			</view>
+		</view>
+		<view class="long-btn long-btn-brown begin-btn">
+			点击拼出上面的图片领红包
+		</view>
+		<view class="function-box">
+			<navigator url="../cash/cash">
+				<text style=" background: url(https://img.xmeizhuang.com/XCX/order/cash-icon.png) left center no-repeat; background-size: 18px;">
+					<text style="display:none;">
+						去提现
+					</text>
+					<text>
+						去提现
+					</text>
+				</text>
+			</navigator>
+			<navigator open-type="reLaunch" url="../index/index">
+				<text style=" background: url(https://img.xmeizhuang.com/XCX/order/start-icon.png) left center no-repeat; background-size: 18px;">
+					<text style="display:none;">
+						发起一个
+					</text>
+					<text>
+						发起一个
+					</text>
+				</text>
+			</navigator>
+			<navigator url="../share/share?bao_id=bao15100336109233">
+				<text style=" background: url(https://img.xmeizhuang.com/XCX/order/share-icon.png) left center no-repeat; background-size: 15px auto;">
+					<text style="display:none;">
+						去转发
+					</text>
+					<text>
+						去转发
+					</text>
+				</text>
+			</navigator>
+		</view>
+	</view>
+	<view class="sum">
+		<text>
+			<text style="display:none;">
+				共¥1.00元，领取0/1个
+			</text>
+			<text>
+				共¥1.00元，领取0/1个
+			</text>
+		</text>
+		<navigator url="../report/report?bao_id=bao15100336109233">
+			举报
+		</navigator>
+	</view>
+	<view>
+	</view>
+</view>
+<view class="game">
+	<view class="title">
+		<image src="../../img/loud.png" style="opacity: 0;">
+			<view style="background-image: url('img/loud.png'); background-size: 100% 100%; background-repeat: no-repeat;">
+			</view>
+			<virtual>
+			</virtual>
+		</image>
+		<!-- 提示：请
+		<text style="color: #e33f3f;">
+			<text style="display:none;">
+				点击图片 调换位置
+			</text>
+			<text>
+				点击图片 调换位置
+			</text>
+		</text> -->
+		<!-- ，拼出原图 -->
+		<image src="../../img/loud.png" data-action="off">
+			<view style="background-image: url('img/loud.png'); background-size: 100% 100%; background-repeat: no-repeat;">
+			</view>
+			<virtual>
+			</virtual>
+		</image>
+	</view>
+	<!-- <view class="counter" style=" font-size: 1em;">
+		9
+	</view> -->
+
+
+
+	<view class="pic-box" style=" height: 288px;">
+      <view wx:for="{{imgList}}" bindtap='moveimg' data-index="{{index}}" data-pic="{{item.icon}}"
+            class="pic pic{{item.icon}}" style="{{item.obj}}">
+      </view>
+	</view>
+	<image src="https://img.2gengmei.com//tmp_b9ae8f3a142d86e7d0c3136957ae164a.jpg"
+	style="display: none;"></image>
+</view>
+
+
+
+	<audio style="display: none;" src="https://img.xmeizhuang.com/XCX/order/counting1.mp3">
+	</audio>
+	<view class="audio-default">
+		<view class="audio-left">
+			<view class="audio-button play">
+			</view>
+		</view>
+		<view class="audio-right">
+			<view class="audio-time" parse-text-content="">
+				00:05
+			</view>
+			<view class="audio-info">
+				<view class="audio-name" parse-text-content="">
+					未知歌曲
+				</view>
+				<view class="audio-author" parse-text-content="">
+					未知作者
+				</view>
+			</view>
+		</view>
+	</view>
+	<view>
+	</view>

@@ -30,7 +30,9 @@
           <view class='option'>
               <view class='type no'><button class="flex" open-type="share">转发到群聊</button></view>
               <view class='type yes' bindtap='shareImg'>生成朋友圈分享图</view>
-              <view class='change' bindtap='change'><image src="../images/skin-logo-blue.png" mode='widthFix'></image>换个红包壳</view>
+              <view class='change' bindtap='change'>
+                  <image src="../images/skin-logo-blue.png" mode='widthFix'></image>换个红包壳
+              </view>
           </view>
          
     </view>

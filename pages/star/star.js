@@ -17,17 +17,15 @@ Page({
   onLoad: function (options) {
       //回调
       let that = this;
-      common.getSign(function () {
-        let sign = wx.getStorageSync('sign');
-      })
+      common.getSign(function() {})
       setTimeout(function () {
-          wx.navigateTo({
+        wx.redirectTo({ 
             url: '../index/index',
           })
       }, 2500)
     },
     tap() {
-      wx.navigateTo({
+      wx.redirectTo({
         url: '../index/index',
       })
     },

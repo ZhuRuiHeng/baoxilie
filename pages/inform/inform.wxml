@@ -1,6 +1,7 @@
 <!--pages/inform/inform.wxml-->
 <view class='box'>
     <view class="bg" wx:if="{{finish || Tword}}"></view>
+    <view class='bg' wx:if="{{can_set}}"></view>
     <view class="bg" style='opacity:1;' wx:if="{{pintu}}"></view>
     <view class='content'>
          <view class='avatarUrl'> 
@@ -20,7 +21,43 @@
           </view> 
            <!--语音 -->
          <view class='question' wx:if="{{red_info.red_type=='voice'}}">{{red_info.content}}</view>
-          <view class='money'>
+         <!--face  -->
+         <view class='question' wx:if="{{red_info.red_type=='face_pk'}}">
+            <view class='question'>{{red_info.content}}</view>
+            <view class='niceface'>
+                <view class="opt-view">
+                  <view class="right-block">
+                  </view>
+                  <view class="left-block">
+                  </view>
+                  <view class="weui-flex choose-image" bindtap="phone" wx:if="{{red_status =='wait'}}">
+                      <view class="choose-image__image-view">
+                        <view style='text-align:center;color:#c0a06d'>
+                            <image class='cameraphone'  wx:if="{{tempFilePaths}}" 
+                                    src='{{tempFilePaths}}' mode='center'></image>
+                            <view class='result' wx:else>
+                                <image class='cameraphone'  
+                                    src='../images/coman.png' mode='widthFix'></image>
+                            </view>
+                        </view>  
+                        <text class="camera-text">选择照片PK颜值</text>
+                      </view>
+                  </view>
+                  <view class="weui-flex choose-image" wx:else>
+                      <view class="choose-image__image-view">
+                        <view style='text-align:center;color:#c0a06d'>
+                            <image class='cameraphone'  
+                                    src='../images/coman.png' mode='widthFix'></image>
+                        </view>  
+                        <text class="camera-text" wx:if="{{red_status =='received'}}">已领取</text>
+                        <text class="camera-text" wx:if="{{red_status =='end'}}">你来晚了</text>
+                        <text class="camera-text" wx:if="{{red_status =='refunded'}}">已结束</text>
+                      </view>
+                  </view>
+                </view>
+            </view>
+         </view>
+         <view class='money'>
             <view><text>{{red_info.total_money}}</text>元</view>
           </view>
           <!-- 红包状态 wait待领取 received已领取 end已领完 refunded已退款 -->
@@ -41,6 +78,7 @@
               <view bindtouchstart='voice' bindtouchend='live'  wx:if="{{red_info.red_type=='voice'}}" class='type yes' >
               按住输出以上口令领取赏金语音</view>
           </view>
+          
          <!--tABS  -->
          <view class='tabs'>
               <view class='item' bindtap='money'>
@@ -56,23 +94,56 @@
             <view>共￥{{red_info.total_money}}元，领取{{red_info.receive_count}}/{{red_info.total_count}}个</view>
         </view>
         <!--领取列表  -->
-        <view class='list' wx:for="{{receive_info}}">
-            <view class='top'> <image src="{{item.avatar}}" mode='widthFix'></image>  </view>
-            <view class='keepList'>
-                <view class='itemkeep'  bindtap='inform' data-index='{{index}}'>
-                    <view class='sum item'>
-                        <view class='left'>
-                            {{item.nickname}}
-                            <!--sex  -->
-                            <image wx:if="{{item.gender == 2}}" src="../images/girl.png" mode='widthFix'></image>
-                            <image wx:if="{{item.gender == 1}}" src="../images/box.png" mode='widthFix'></image>
-                            <image wx:if="{{item.gender == 0}}" src="../images/question-icon.png" mode='widthFix'></image>
+        <!--face列表  -->
+        <view class='' wx:if="{{types == 'face_pk'}}">
+              <view class='list' wx:for="{{receive_info}}">
+                <view class='top' bindtap='nicephone' data-nicephone="{{item.image}}"
+                    style='background:url({{item.image}}) no-repeat center;background-size:cover'> 
+                </view>
+                <view class='keepList'>
+                    <view class='itemkeep'  bindtap='inform' data-index='{{index}}'>
+                        <view class='sum item'>
+                            <view class='left userimg'>
+                            <image src="{{item.avatar}}" mode='widthFix'></image>
+                                {{item.nickname}}
+                                <!--sex  -->
+                                <text class='bga' wx:if="{{item.gender == 2}}">女 {{item.age}}岁</text>
+                                <text class='bga' wx:if="{{item.gender == 1}}">男 {{item.age}}岁</text>
+                                <text class='bga' wx:if="{{item.gender == 0}}">未知 {{item.age}}岁</text> 
+                            </view>
+                            <!--  -->
+                            <view class='right' bindtap='setting' wx:if="{{receive_info.can_set}}">
+                                <image src="../images/rol.png" mode="widthFix"></image>
+                            </view>
+                        </view> 
+                        <view class='time item flexface'>
+                            <view class='lefts'>颜值：<text class='color'>{{item.beauty}}</text></view>
+                            <view>奖励￥<text class='color'>{{item.receive_money}}</text></view>
+                            <view class='right'>时间：<text class='color'>{{item.receive_time}}</text></view>
                         </view>
-                        <view class='right'>￥{{item.receive_money}}</view>
-                    </view> 
-                    <view class='time item'>
-                        <view class='left' style='width:50%;'>{{item.content}}</view>
-                        <view class='right' style='width:50%;'>{{item.receive_time}}</view>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <view class='' wx:else>
+            <view class='list' wx:for="{{receive_info}}">
+                <view class='top'> <image src="{{item.avatar}}" mode='widthFix'></image>  </view>
+                <view class='keepList'>
+                    <view class='itemkeep'  bindtap='inform' data-index='{{index}}'>
+                        <view class='sum item'>
+                            <view class='left'>
+                                {{item.nickname}}
+                                <!--sex  -->
+                                <image wx:if="{{item.gender == 2}}" src="../images/girl.png" mode='widthFix'></image>
+                                <image wx:if="{{item.gender == 1}}" src="../images/box.png" mode='widthFix'></image>
+                                <image wx:if="{{item.gender == 0}}" src="../images/question-icon.png" mode='widthFix'></image>
+                            </view>
+                            <view class='right'>￥{{item.receive_money}}</view>
+                        </view> 
+                        <view class='time item'>
+                            <view class='left' style='width:50%;'>{{item.content}}</view>
+                            <view class='right' style='width:50%;'>{{item.receive_time}}</view>
+                        </view>
                     </view>
                 </view>
             </view>
@@ -117,7 +188,7 @@
             </view>
         </view>
     </view>
-    <!--拼图  -->
+    <!--拼图  --> 
     <view class='pintu' wx:if="{{pintu}}">
         <view class='tishi'>提示：
             <text style='color:#d24d46'>请点击图片，调换位置</text>拼出原图
@@ -130,9 +201,15 @@
         </view>
         <view class='time'><view class='now' style='color:#fff;'>{{count_down}}</view></view>
         <view class='pinimg'>
-            <image bindtap='moveImg' wx:for="{{pinimgs}}" data-id="{{item.id}}" data-index="{{index}}"
+            <image class='{{index==pinimgIndex?active:border}}'  bindtap='moveImg' 
+                wx:for="{{pinimgs}}" data-id="{{item.id}}" data-index="{{index}}"
               src="{{item.pic}}" mode='widthFix'>
             </image>
         </view>
     </view> 
+    <!--can_set设置是否发起者可见  -->
+    <view class='footer' wx:if="{{can_set}}">
+        <view class='set set1' bindtap='can_set'>设置仅发起者能看到这张照片</view>
+        <view class='set' bindtap='quxiao'>取消</view>
+    </view>
 </view>

@@ -21,7 +21,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": -1,
+			"current": 1,
 			"list": [
 				{
 					"id": -1,
@@ -45,7 +45,7 @@
 					"id": 3,
 					"name": "inform",
 					"pathName": "pages/inform/inform",
-					"query": "scene=packet_84"
+					"query": "scene=packet_126"
 				},
 				{
 					"id": 4,
@@ -70,6 +70,12 @@
 					"name": "star",
 					"pathName": "pages/star/star",
 					"query": "red_id=49"
+				},
+				{
+					"id": -1,
+					"name": "demo",
+					"pathName": "pages/demo/demo",
+					"query": "scene=packet_126"
 				}
 			]
 		}
