@@ -25,12 +25,12 @@ Page({
         red:'生成拼字红包',
         active:true
       },
-       {
-        title: '拼图红包',
-        typei: "img",
-        red: '生成拼图红包',
-        active: false
-      }, 
+      //  {
+      //   title: '拼图红包',
+      //   typei: "img",
+      //   red: '生成拼图红包',
+      //   active: false
+      // }, 
       {
         title: '口令红包',
         typei: "voice",
