@@ -1,0 +1,9 @@
+<!--pages/niceimg/niceimg.wxml-->
+<view class='box'>
+    <view class='niceImg'>
+          <view class='nice' wx:for="{{niceImg}}" data-url='https://qncdn.playonwechat.com/{{item}}'
+                 bindtap='niceImg' data-index='{{index}}'>
+              <image src="https://qncdn.playonwechat.com/{{item}}" mode='scaleToFill'></image>
+          </view>
+    </view>
+</view>

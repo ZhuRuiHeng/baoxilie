@@ -1,0 +1,77 @@
+{
+	"description": "项目配置文件。",
+	"setting": {
+		"urlCheck": false,
+		"es6": true,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true
+	},
+	"compileType": "miniprogram",
+	"libVersion": "1.6.0",
+	"appid": "wxc7c079b7692732ca",
+	"projectname": "%E5%8C%85%E4%BD%A0%E6%8B%BC",
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": -1,
+			"list": [
+				{
+					"id": -1,
+					"name": "提现",
+					"pathName": "pages/money/money",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "question",
+					"pathName": "pages/question/question",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "keep",
+					"pathName": "pages/keep/keep",
+					"query": ""
+				},
+				{
+					"id": 3,
+					"name": "inform",
+					"pathName": "pages/inform/inform",
+					"query": "scene=packet_84"
+				},
+				{
+					"id": 4,
+					"name": "share",
+					"pathName": "pages/share/share",
+					"query": "red_id=8&bg_id=77"
+				},
+				{
+					"id": -1,
+					"name": "shareImg",
+					"pathName": "pages/shareImg/shareImg",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "packet",
+					"pathName": "pages/packet/packet",
+					"query": "red_id=26"
+				},
+				{
+					"id": -1,
+					"name": "star",
+					"pathName": "pages/star/star",
+					"query": "red_id=49"
+				}
+			]
+		}
+	}
+}
