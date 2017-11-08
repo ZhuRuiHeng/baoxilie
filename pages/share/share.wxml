@@ -2,8 +2,8 @@
 <view class='box'>
     <view class='content'>
          <view class='avatarUrl'> 
-         <!--{{userInfo.avatarUrl}}  -->
-            <image src="{{shareList.avatar}}" mode='widthFix'></image> 
+            <image wx:if="{{shareList.avatar}}" src="{{shareList.avatar}}" mode='widthFix'></image> 
+            <image wx:else src="../images/user.png" mode='widthFix'></image>   
          </view>
          <view class='avatarUrl'> 
             <view class='nickName'>
@@ -25,7 +25,8 @@
           <!--拼图  -->
           <!--二维码  -->
           <view class='question'>
-              <image src="{{shareList.qr_url}}" mode='widthFix'></image>
+              <image  wx:if="{{shareList.qr_url}}" src="{{shareList.qr_url}}" mode='widthFix'></image>
+              <image wx:else src="../images/logo.png" mode='widthFix'></image>
           </view>
           <view class='option'>
               <view class='type no'><button class="flex" open-type="share">转发到群聊</button></view>

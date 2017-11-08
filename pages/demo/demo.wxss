@@ -121,9 +121,14 @@ body{ min-height: 100vh; background-color: #f5f5f5; font-size: 15px; }
 .sum navigator{ color: #3098f9; }
 .game{ position: fixed; left: 0; top: 0; width: 100%; height: 100vh; background-color: #242424; overflow: auto; }
 .game .title{ display: flex; justify-content: center; align-items: center; text-align: center; line-height: 52px; color: #fff; }
-.counter{ transition: 0.5s; box-sizing: border-box; width: 48px; height: 48px; margin: 0 auto; border: 2px solid #e33f3f; border-radius: 50%; text-align: center; line-height: 43px; color: #fff; }
+.counter{ translate: .5s; box-sizing: border-box; width: 48px; height: 48px; margin: 0 auto; border: 2px solid #e33f3f; border-radius: 50%; text-align: center; line-height: 43px; color: #fff; }
 .game .pic-box{ position: relative; width: 288px; margin: 28px auto 0; }
-.game .pic{ transition: .3s; position: absolute; box-sizing: border-box; width: 96px; border: 1px solid #fff; color: #fff; }
+.game .pic{ translate: .3s; position: absolute; box-sizing: border-box; width: 96px; border: 1px solid #fff; color: #fff; 
+/*20px,20px  */
+}
+.game .pic.active{
+    border:3rpx solid #e33f3f;
+}
 .pic0,.pic3,.pic6{ left: 0; }
 .pic1,.pic4,.pic7{ left: 96px; }
 .pic2,.pic5,.pic8{ left: 192px; }

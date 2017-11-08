@@ -73,9 +73,7 @@ Page({
   },
   // 提现
   pay(e){
-    wx.showLoading({
-      title: '加载中',
-    });
+    
     let that = this;
     console.log("formId:", e.detail.formId);
     // 提现
@@ -104,7 +102,6 @@ Page({
         }
       }
     }) 
-    wx.hideLoading()
   },
   //清空input
   cleanInput: function () {

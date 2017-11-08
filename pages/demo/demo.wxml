@@ -105,10 +105,18 @@
 
 
 	<view class="pic-box" style=" height: 288px;">
-      <view wx:for="{{imgList}}" bindtap='moveimg' data-index="{{index}}" data-pic="{{item.icon}}"
-            class="pic pic{{item.icon}}" style="{{item.obj}}">
+      <view wx:for="{{imgList}}" bindtap='moveimg' data-index="{{index}}"
+            data-pic="{{item.icon}}"  data-obj="{{item.obj}}"
+            class="pic pic{{item.icon}}" style="{{item.obj}}{{item.height}}">
       </view>
 	</view>
+
+
+
+
+
+
+
 	<image src="https://img.2gengmei.com//tmp_b9ae8f3a142d86e7d0c3136957ae164a.jpg"
 	style="display: none;"></image>
 </view>

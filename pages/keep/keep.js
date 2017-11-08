@@ -13,8 +13,8 @@ Page({
     receive_list:[],
     total_count:'',
     total_money:'',
-    send_list:'',
-    value:1
+    value:1,
+    page: 1
   },
 
   /**
@@ -127,16 +127,84 @@ Page({
   },
 
   /**
-   * 页面上拉触底事件的处理函数
+   *   下拉分页
    */
   onReachBottom: function () {
-  
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-  
+      wx.showLoading({
+        title: '加载中',
+      });
+      let that = this;
+      let sign = wx.getStorageSync('sign');
+      let value = that.data.value;
+      if (value == 2) { //发出
+        let oldGoodsList = that.data.send_list;
+        console.log("oldGoodsList:" + oldGoodsList);
+        var oldPage = that.data.page;
+        var reqPage = oldPage + 1;
+        console.log(that.data.page);
+        wx.request({
+          url: apiurl + "red/sent-red-list?sign=" + sign + '&operator_id=' + app.data.kid,
+          data:{
+            page: reqPage,
+          },
+          header: {
+            'content-type': 'application/json'
+          },
+          method: "GET",
+          success: function (res) {
+            console.log("新发出红包:", res);
+            var send_list = res.data.data.send_list;
+            if (send_list.length == 0){
+              tips.alert('没有更多数据了');
+              return;
+            } 
+            var page = oldPage + 1;
+            var newContent = oldGoodsList.concat(send_list);
+            that.setData({
+              send_list: newContent,
+              page: reqPage
+            })
+            wx.hideLoading();
+            if (newContent == undefined) {
+              tips.alert('没有更多数据')
+            }
+          }
+        })
+      } else {  //收到
+        let oldGoodsList = that.data.receive_list;
+        console.log("oldGoodsList:" + oldGoodsList);
+        var oldPage = that.data.page;
+        var reqPage = oldPage + 1;
+        console.log(that.data.page);
+        wx.request({
+          url: apiurl + "red/got-red-list?sign=" + sign + '&operator_id=' + app.data.kid,
+          data: {
+            page: reqPage,
+          },
+          header: {
+            'content-type': 'application/json'
+          },
+          method: "GET",
+          success: function (res) {
+            console.log("新收到红包:", res);
+            var receive_list = res.data.data.receive_list;
+            if (receive_list.length == 0) {
+              tips.alert('没有更多数据了');
+              return;
+            }
+            var page = oldPage + 1;
+            var newContent = oldGoodsList.concat(receive_list);
+            that.setData({
+              receive_list: newContent,
+              page: reqPage
+            })
+            wx.hideLoading();
+            if (newContent == undefined) {
+              tips.alert('没有更多数据')
+            }
+          }
+        })
+      }
+      wx.hideLoading()
   }
 })

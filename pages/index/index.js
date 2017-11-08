@@ -12,9 +12,10 @@ Page({
     hasUserInfo: false,
     style:'text', //红包类型
     array: ['30秒', '5秒', '10秒', '15秒', '20秒', '30秒', '40秒', '50秒', '60秒'],
-    textList: ['请输入文字','大吉大利，今晚吃鸡', '升职加薪总经理，走上人生巅峰~', '科学研究明表汉怎字序排不也影响阅读', '生日快乐~'],
+    textList: ['大吉大利，今晚吃鸡', '升职加薪总经理，走上人生巅峰~', '科学研究明表汉怎字序排不也影响阅读', '生日快乐~'],
     speak: ['我爱你', '我喜欢你', '我是逗比', '我是猪'],
     faceList:['听说好看的人手气都不差','比一比谁的颜值最高','有颜值才能领取的福利','我想看看你们的颜值有多高'],
+    commons:['不公开','公开'],
     service:0,//服务费
     allmoney:'',//余额
     animation:false,
@@ -25,12 +26,12 @@ Page({
         red:'生成拼字红包',
         active:true
       },
-      //  {
-      //   title: '拼图红包',
-      //   typei: "img",
-      //   red: '生成拼图红包',
-      //   active: false
-      // }, 
+       {
+        title: '拼图红包',
+        typei: "img",
+        red: '生成拼图红包',
+        active: false
+      }, 
       {
         title: '口令红包',
         typei: "voice",
@@ -55,11 +56,16 @@ Page({
         title: '余额提现',
         url: '../money/money'
       },
+      
       {
+        img: '../images/commonred.png',
+        title: '公共红包',
+        url: '../commonred/commonred'
+      },{
         img: '../images/3.png',
         title: '常见问题',
         url: '../question/question'
-      }
+      },
     ],
     index: 0,
     wenzi:0,
@@ -75,7 +81,9 @@ Page({
     voice:false, //语音
     face:false,
     play:true, //红包玩法拼
-    count_down:'30'
+    count_down:30,
+    indexCount:0,
+    commonInx:0
   },
   
   onLoad: function (options) {
@@ -88,11 +96,7 @@ Page({
     let style = wx.getStorageSync('style');
     if (style){
       that.setData({
-          style: style,
-          text: true, //文字
-          img: false, //图片
-          voice: false, //语音
-          face: false
+          style: style
       })
     }
     
@@ -158,14 +162,14 @@ Page({
   change(e){
     let that = this;
     let index = e.currentTarget.dataset.index;
-    let typei = e.currentTarget.dataset.typei;
+    let style = e.currentTarget.dataset.typei;
     let typeP = that.data.typeP;
     that.setData({
       animation: true
     })
     console.log(that.data.animation);
     
-    if (typei == 'img'){
+    if (style == 'img'){
       wx.setStorageSync('style', 'img');
       that.setData({
         text: false, //文字
@@ -174,7 +178,7 @@ Page({
         face: false,
         style:'img'
       })
-    } else if (typei == 'voice'){
+    } else if (style == 'voice'){
       wx.setStorageSync('style', 'voice');
       that.setData({
         text: false, //文字
@@ -183,7 +187,7 @@ Page({
         face: false,
         style: 'voice'
       })
-    } else if (typei == 'face') {
+    } else if (style == 'face') {
       wx.setStorageSync('style', 'face');
       that.setData({
         text: false, //文字
@@ -192,7 +196,7 @@ Page({
         face: true,
         style: 'face'
       })
-    } else if (typei == 'text'){
+    } else if (style == 'text'){
       wx.setStorageSync('style', 'text');
       that.setData({
         text: true, //文字
@@ -202,21 +206,21 @@ Page({
         style: 'text'
       })
     }
-    setTimeout(function(){
+    //setTimeout(function(){
       that.setData({
         animation: false
       })
       console.log(that.data.animation);
-    },2000)
+    //},2000)
+    
     for (let i = 0; i < typeP.length;i++){
-      typeP[i].active = false;
-      if(i == index){
-        typeP[i].active = true;
-      }
-      that.setData({
-        typeP
-      })
+        typeP[i].active = false;
     }
+    typeP[index].active = true;
+    console.log(typeP)
+    that.setData({
+      typeP
+    })
   },
   // 生成红包
   formSubmit: function (e) {
@@ -230,6 +234,7 @@ Page({
       tips.alert("您没有填写数量");
       return false;
     }
+    console.log("count_down:",that.data.count_down);
     if (!that.data.count_down) {
       tips.alert("您没有选择挑战时间");
       return false;
@@ -263,7 +268,8 @@ Page({
             content: that.data.word,
             form_id: form_id + Math.random() * 10 + 1,
             type: 'random',
-            count_down: that.data.count_down
+            count_down: that.data.count_down,
+            is_public: that.data.commonInx
           }
         }else{
           if (!that.data.money2) {
@@ -282,7 +288,8 @@ Page({
             content: that.data.word,
             form_id: form_id + Math.random() * 10 + 1,
             type: 'average',
-            count_down: that.data.count_down
+            count_down: that.data.count_down,
+            is_public: that.data.commonInx
           }
         }
         wx.request({
@@ -377,7 +384,8 @@ Page({
           content: that.data.tempFilePaths,
           form_id: form_id + Math.random() * 10 + 1,
           type: 'random',
-          count_down: that.data.count_down
+          count_down: that.data.count_down,
+          is_public: that.data.commonInx
         }
       } else {
         console.log("play普:", play);
@@ -395,7 +403,8 @@ Page({
           content: that.data.tempFilePaths,
           form_id: form_id + Math.random() * 10 + 1,
           type: 'average',
-           count_down: that.data.count_down
+          count_down: that.data.count_down,
+          is_public: that.data.commonInx
         }
       }
       // 图片
@@ -486,7 +495,8 @@ Page({
           content: that.data.speakmove,
           form_id: form_id + Math.random() * 10 + 1,
           type: 'random',
-          count_down: that.data.count_down
+          count_down: that.data.count_down,
+          is_public: that.data.commonInx
         }
       } else {
         console.log("play普:", play);
@@ -500,7 +510,8 @@ Page({
           content: that.data.speakmove,
           form_id: form_id + Math.random() * 10 + 1,
           type: 'average',
-          count_down: that.data.count_down
+          count_down: that.data.count_down,
+          is_public: that.data.commonInx
         }
       }
       //  语音
@@ -597,7 +608,8 @@ Page({
           content: that.data.faces,
           form_id: form_id + Math.random() * 10 + 1,
           type: 'random',
-          count_down: that.data.count_down
+          count_down: that.data.count_down,
+          is_public: that.data.commonInx
         }
       } else {
         console.log("play普:", play, that.data.faces);
@@ -615,7 +627,8 @@ Page({
           content: that.data.faces,
           form_id: form_id + Math.random() * 10 + 1,
           type: 'average',
-          count_down: that.data.count_down
+          count_down: that.data.count_down,
+          is_public: that.data.commonInx
         }
       }
       //颜值
@@ -688,6 +701,12 @@ Page({
         }
       })
     }
+    that.setData({
+        word: "",
+        money1: "",
+        money2: "",
+        num: ''
+    })
     //wx.setStorageSync('style', '');
   },
   //事件处理函数text
@@ -711,7 +730,7 @@ Page({
   bindPickerChange2: function (e) {
     console.log('picker发送选择改变，携带值为', e.detail.value)
     this.setData({
-      count_down: e.detail.value
+      indexCount: e.detail.value
     })
   },
   //事件处理函数speak语音口令
@@ -731,6 +750,13 @@ Page({
       yanzhi: e.detail.value,
       faces: this.data.faceList[e.detail.value],
       options: true
+    })
+  },
+  //事件处理函数common是否公开
+  bindPickerChange5: function (e) {
+    console.log('picker发送选择改变，携带值为', e.detail.value)
+    this.setData({
+      commonInx: e.detail.value
     })
   },
   // face

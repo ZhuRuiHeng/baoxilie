@@ -10,7 +10,8 @@
     "pages/share/share",
     "pages/shareImg/shareImg",
     "pages/packet/packet",
-    "pages/demo/demo"
+    "pages/demo/demo",
+    "pages/commonred/commonred"
     
   ],
   "window":{

@@ -1,0 +1,35 @@
+/* pages/commonred/commonred.wxss */
+.container,page{
+  width: 100%;
+  background: #f5f5f5;
+}
+.keepList{
+  width: 100%;
+  padding: 20rpx;
+  font-size: 26rpx;
+  box-sizing: border-box;
+}
+.keepList .itemkeep{
+  background: #fff;
+  border-radius: 10rpx;
+  padding:20rpx;
+  box-sizing: border-box;
+  overflow: hidden;
+  margin: 20rpx 0;
+}
+.keepList .itemkeep .item .left{
+  display: inline-block;
+  width: 69%;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.keepList .itemkeep .item .right{
+  display: inline-block;
+  width: 30%;
+  text-align: right;
+}
+.keepList .itemkeep .time{
+  color: #626262;
+}
+.keepList .itemkeep .sum .right{
+  color: #d24d46;
+}

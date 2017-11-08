@@ -20,7 +20,7 @@ App({
     wx.setStorageSync('logs', logs);
     let extConfig = wx.getExtConfigSync ? wx.getExtConfigSync() : {};
     that.data.kid = extConfig.kid;
-    //that.data.kid = 123;
+    that.data.kid = 123; //123 464
     wx.setStorageSync('kid', that.data.kid); //that.data.kid
     wx.showLoading({
       title: '加载中',
@@ -49,7 +49,7 @@ App({
                 wx.getUserInfo({
                   success: function (res) {
                     console.log("微信信息");
-                    console.log(res);
+                   // console.log(res);
                     let userData = {};
                     let userInfo = res.userInfo
                     let nickName = userInfo.nickName

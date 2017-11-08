@@ -1,0 +1,24 @@
+<!--pages/commonred/commonred.wxml-->
+<view class='container'>
+    <view class='keepList' wx:if="{{commonList.length==0}}">
+        <view class='center' style='text-align:center;font-size:26rpx;padding:20rpx 0;'>暂时没有数据</view>
+    </view>
+    <view class='keepList' wx:else>
+        <view class='itemkeep' wx:for="{{commonList}}" bindtap='inform' 
+              data-index='{{index}}' data-red_id='{{item.r_id}}' data-red_type="{{item.red_type}}">
+            <view class='sum item'>
+                <view class='left'>
+                    <text wx:if="{{item.red_type=='text'}}">拼字红包</text>
+                    <text wx:if="{{item.red_type=='img'}}">拼图红包</text>
+                    <text wx:if="{{item.red_type=='voice'}}">口令红包</text>
+                    <text wx:if="{{item.red_type=='face_pk'}}">颜值红包</text>
+                </view>
+                <view class='right'>￥{{item.total_money}}</view>
+            </view> 
+            <view class='time item'>
+                <view class='left'>{{item.receive_time}}</view>
+                <view class='right'>{{item.receive_count}}/{{item.total_count}}</view>
+            </view>
+        </view>
+    </view>
+</view> 
