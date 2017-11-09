@@ -146,7 +146,13 @@
                                 <view class='right'>￥{{item.receive_money}}</view>
                             </view> 
                             <view class='time item'>
-                                <view class='left' style='width:50%;'>{{item.content}}</view>
+                                <view class='left' bindtap="audioPlay" style="width:50%;"  wx:if="{{red_info.red_type=='voice'}}">
+                                      <view  style="width:50%;background:#f2f2f2;color:#626262;border:1px solid #ddd;border-radius:8rpx;height:60rpx;margin-left:10rpx;"> 
+                                        <audio  
+                                      poster="http://y.gtimg.cn/music/photo_new/T002R300x300M000003rsKF44GyaSk.jpg?max_age=2592000" name="" author="许巍" src="http://ws.stream.qqmusic.qq.com/M500001VfvsJ21xFqb.mp3?guid=ffffffff82def4af4b12b3cd9337d5e7&uin=346897220&vkey=6292F51E1E384E06DCBDC9AB7C49FD713D632D313AC4858BACB8DDD29067D3C601481D36E62053BF8DFEAF74C0A5CCFADD6471160CAF3E6A&fromtag=46" id="myAudio"  ></audio>
+                                      </view>
+                                  </view>
+                                <view class='left' wx:else style='width:50%;'>{{item.content}}</view>
                                 <view class='right' style='width:50%;'>{{item.receive_time}}</view>
                             </view>
                         </view>
@@ -372,7 +378,13 @@
                               <view class='right'>￥{{item.receive_money}}</view>
                           </view> 
                           <view class='time item'>
-                              <view class='left' style='width:50%;'>{{item.content}}</view>
+                              <view class='left' bindtap="audioPlay" style="width:50%;"  wx:if="{{red_info.red_type=='voice'}}">
+                                      <view  style="width:50%;background:#f2f2f2;color:#626262;border:1px solid #ddd;border-radius:8rpx;height:60rpx;margin-left:10rpx;"> 
+                                        <audio  
+                                      poster="http://y.gtimg.cn/music/photo_new/T002R300x300M000003rsKF44GyaSk.jpg?max_age=2592000" name="" author="许巍" src="http://ws.stream.qqmusic.qq.com/M500001VfvsJ21xFqb.mp3?guid=ffffffff82def4af4b12b3cd9337d5e7&uin=346897220&vkey=6292F51E1E384E06DCBDC9AB7C49FD713D632D313AC4858BACB8DDD29067D3C601481D36E62053BF8DFEAF74C0A5CCFADD6471160CAF3E6A&fromtag=46" id="myAudio"  ></audio>
+                                      </view>
+                                  </view>
+                              <view wx:else class='left' style='width:50%;'>{{item.content}}</view>
                               <view class='right' style='width:50%;'>{{item.receive_time}}</view>
                           </view>
                       </view>
