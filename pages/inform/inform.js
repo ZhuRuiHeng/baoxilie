@@ -14,7 +14,11 @@ Page({
     askIndex: '',
     askcontents:'',
     finish:false,
-    result:false
+    result:false,
+    pintu:false,
+    decide:false, //拼字是否成功
+    depintu:false, //拼图是否成功
+    clear:true
   },
 
   /**
@@ -95,6 +99,7 @@ Page({
   //判断是否有types 
   formSubmit: function (e) {
     let form_id = e.detail.formId;
+    let sign = wx.getStorageSync('sign');
     wx.request({
       url: apiurl + "red/save-form?sign=" + sign + '&operator_id=' + app.data.kid,
       data: {
@@ -212,8 +217,8 @@ Page({
                       red_id: that.data.red_id
                     })
                   }, 300)
-                  wx.navigateTo({
-                    url: '../inform/inform?red_id='+that.data.red_id
+                  wx.redirectTo({
+                    url: '../inform/inform?red_id=' + that.data.red_id
                   })
                 } else {
                   console.log("语音：",res.data.msg);
@@ -254,22 +259,29 @@ Page({
   },
   //领取
   receiver(){
+    console.log("receiver");
     let that = this;
     let types = that.data.types;
-    let count_down = that.data.red_info.count_down;
     let sign = wx.getStorageSync('sign');
-    console.log("count_down", count_down);
+    //clearInterval(inter);
+    if (that.data.decide == true) {
+      tips.alert('您已经拼字成功');
+      return;
+    }
+    if (that.data.clear){
+      clearInterval(inter);
+    }
+    let count_down = that.data.red_info.count_down;
+    //console.log("count_down", count_down);
     if (count_down>0){
       var inter = setInterval(function () {
+        //console.log("count_down1", count_down);
          count_down -= 1;
           that.setData({
             count_down: count_down
           })
           if(that.data.finish){
             clearInterval(inter);
-          }
-          if(that.data.clear){
-           // clearInterval(inter);
           }
           if (count_down <= 0) {
             clearInterval(inter);
@@ -310,7 +322,8 @@ Page({
       console.log('_contents', _contents);
       that.setData({
         Tword:true,
-        _contents: _contents
+        _contents: _contents,
+        clear:true
       })
     } else if (that.data.types = "voice") {  //_vioce
      
@@ -318,12 +331,17 @@ Page({
   },
 //拼图img
   img(){
-   wx.showLoading({
-      title: '加载中',
-    });
+    wx.showLoading({
+        title: '加载中',
+      });
+   
     let that = this;
     let sign = wx.getStorageSync('sign');
     let count_down = that.data.count_down;
+    if (that.data.depintu == true) {
+      tips.alert('您已经拼图成功');
+      return;
+    }
     if (count_down > 0) {
       var inter = setInterval(function () {
         count_down -= 1;
@@ -469,9 +487,11 @@ Page({
               tips.alert('恭喜你');
               that.setData({
                 finish: false,
-                result: true,
+                result: false,
                 Tword:false,
                 clear: true,
+                depintu:true,
+                decide:true,
                 informList: res.data.data,
                 member_info: res.data.data.member_info,
                 receive_info: res.data.data.receive_info,
@@ -482,33 +502,41 @@ Page({
               
               setTimeout(function () {
                 that.setData({
-                  result: false,
+                  result: true,
                   finish: false,
+                  decide: true,
                   clear: true
                 })
               }, 2000)
-              wx.navigateTo({
-                url: '../inform/inform?red_id='+that.data.red_id
+              wx.redirectTo({
+                url: '../inform/inform?red_id=' + that.data.red_id
               })
             }else{
               tips.alert(res.data.msg);
               that.setData({
-                finish: true,
-                result: false,
+                finish: false,
+                result: true,
                 Tword: false,
-                clear: true
+                clear: true,
+                askcontents:'' //重置
+              })
+              wx.redirectTo({
+                url: '../inform/inform?red_id=' + that.data.red_id
               })
             }
           }
         })
-        wx.hideLoading()
+      //  wx.hideLoading()
       }
     },
   //again
   again(){
     let that = this;
     let _contents = that.data._contents;
+    let count_down = that.data.red_info.count_down;
     console.log(_contents);
+    clearInterval(inter); //先清除
+    // Tword
     if (_contents){
         for (let i = 0; i < _contents.length; i++) {
           _contents[i].active = false;
@@ -517,11 +545,10 @@ Page({
           finish: false,
           Tword: true,
           askcontents: '',
-          count_down: that.data.red_info.count_down,
           _contents
         })
     }else{
-      // 随机
+      // 随机pintu
       function random(min, max) {
         if (max == null) {
           max = min;
@@ -529,7 +556,7 @@ Page({
         }
         return min + Math.floor(Math.random() * (max - min + 1));
       };
-      // 随机数组
+      // 随机数组 
       function shuffle(arr) {
         let length = arr.length,
           shuffled = Array(length);
@@ -559,31 +586,62 @@ Page({
         pintu:true,
         imgList: imgList
       })
-    }
-    
-    let count_down = that.data.red_info.count_down;
-    if (count_down > 0) {
-      var inter = setInterval(function () {
-        count_down -= 1;
+      if (count_down<=0){
         that.setData({
-          count_down: count_down
+          finish: true,
+          result:false,
+          pintu: false,
+          imgList: imgList,
+          clear:true
         })
-        if (that.data.clear){
-          clearInterval(inter);
-        }
-        if (count_down <= 0) {
-          clearInterval(inter);
+      }
+    }
+    //倒计时
+    console.log("again:", count_down);
+    if (count_down > 0) {
+      console.log("decide:", that.data.decide)
+      let pintu = that.data.pintu;
+      if (that.data.decide== true){  //拼字成功
+         clearInterval(inter);
+         that.setData({
+           finish: false,
+           result: true,
+           Tword: false
+         })
+      }else{
+        var inter = setInterval(function () {
+          count_down -= 1;
+          console.log(count_down);
           that.setData({
-            finish: true,
-            result: false,
-            Tword: false,
-            clear:true
+            count_down: count_down
           })
-        }
-      }, 1000)
+          if (count_down <= 0) {
+            clearInterval(inter);
+            console.log("Tword:", count_down);
+            that.setData({
+              finish: true,
+              result: false,
+              Tword: false,
+              clear: true
+            })
+          }
+          console.log("depintu", that.data.depintu);
+          if (that.data.depintu == true) { //拼图成功
+            console.log("pintu:", count_down);
+            clearInterval(inter);
+            that.setData({
+              finish: false,
+              result: true,
+              pintu: false,
+              clear: true
+            })
+          }
+        }, 1000)
+      }
     } else {
+      clearInterval(inter);
       that.setData({
-        finish: true,
+        finish: false,
         result: false,
         Tword: false,
         clear: true
@@ -672,9 +730,8 @@ Page({
                   let status = res.data.status;
                   if (status == 1) {
                     tips.success('颜值爆棚');
-                    wx.showLoading({
-                      title: '加载中',
-                    });
+                   } else {
+                    tips.alert(res.data.msg);
                     wx.request({
                       url: apiurl + "red/red-detail?sign=" + sign + '&operator_id=' + app.data.kid,
                       data: {
@@ -686,21 +743,25 @@ Page({
                       method: "GET",
                       success: function (res) {
                         console.log("红包详情:", res);
-                        that.setData({
-                          informList: res.data.data,
-                          member_info: res.data.data.member_info,
-                          receive_info: res.data.data.receive_info,
-                          red_info: res.data.data.red_info,
-                          red_status: res.data.data.red_status,
-                          types: res.data.data.red_info.red_type,
-                          count_down: res.data.data.red_info.count_down
-                        })
+                        var status = res.data.status;
+                        if (status == 1) {
+                          that.setData({
+                            informList: res.data.data,
+                            member_info: res.data.data.member_info,
+                            receive_info: res.data.data.receive_info,
+                            red_info: res.data.data.red_info,
+                            red_status: res.data.data.red_status,
+                            types: res.data.data.red_info.red_type,
+                            count_down: res.data.data.red_info.count_down
+                          })
+                        } else {
+                          wx.redirectTo({
+                            url: '../inform/inform?red_id=' + that.data.red_id
+                          })
+                        }
                         console.log("types", that.data.types);
                       }
                     })
-                    wx.hideLoading()
-                  } else {
-                    tips.alert(res.data.msg);
                   }
                 }
               })
@@ -708,7 +769,11 @@ Page({
               that.setData({
                 red_status: 'wait'
               })
-              tips.alert(res.data.msg)
+              tips.alert(res.data.msg);
+              console.log("types", that.data.msg + '1111');
+              wx.redirectTo({
+                url: '../inform/inform?red_id=' + that.data.red_id
+              })
             }
 
           }
@@ -768,6 +833,7 @@ Page({
   // 拼图
   moveimg(e) {
     let that = this;
+    let sign = wx.getStorageSync('sign');
     console.log(e);
     let imgList = that.data.imgList;
     let pic = that.data.pic;
@@ -840,17 +906,19 @@ Page({
                   that.setData({
                     result: true,
                     clear: true,
-                    finish: false
+                    finish: false,
+                    depintu:true
                   })
                   setTimeout(function () {
                     that.setData({
                       pintu: false,
-                      finish: false
+                      finish: false,
+                      depintu : true
                     })
                   }, 3000)
                 }
               })
-              wx.navigateTo({
+              wx.redirectTo({
                 url: '../inform/inform?red_id=' + that.data.red_id
               })
             } else {

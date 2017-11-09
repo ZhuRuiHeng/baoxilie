@@ -206,13 +206,13 @@ Page({
         style: 'text'
       })
     }
-    //setTimeout(function(){
+    setTimeout(function(){
       that.setData({
         animation: false
       })
       console.log(that.data.animation);
-    //},2000)
-    
+    },2000)
+
     for (let i = 0; i < typeP.length;i++){
         typeP[i].active = false;
     }
@@ -783,14 +783,14 @@ Page({
   money1(e) {
     this.setData({
       money1: e.detail.value,
-      service: e.detail.value*0.02
+      service: (e.detail.value * 0.02).toFixed(2)
     })
   },
   // 单个金额 普
   money2(e) {
     this.setData({
       money2: e.detail.value,
-      service: (e.detail.value * this.data.num) * 0.02
+      service: ((e.detail.value * this.data.num) * 0.02).toFixed(2)
     })
   },
   // 数量
@@ -803,7 +803,7 @@ Page({
     } else {  //普
       this.setData({
         num: e.detail.value,
-        service: (this.data.money2 * e.detail.value) * 0.02
+        service: ((this.data.money2 * e.detail.value) * 0.02).toFixed(2)
       })
     }
      

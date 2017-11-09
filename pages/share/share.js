@@ -77,6 +77,7 @@ Page({
         })
       }
     })
+    wx.hideLoading()
   },
 
  

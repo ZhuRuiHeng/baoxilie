@@ -19,12 +19,12 @@ App({
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs);
     let extConfig = wx.getExtConfigSync ? wx.getExtConfigSync() : {};
-    that.data.kid = extConfig.kid;
-    that.data.kid = 123; //123 464
+    that.data.kid = extConfig.kid ? extConfig.kid : '123';
+    //that.data.kid = 123; //123 464
     wx.setStorageSync('kid', that.data.kid); //that.data.kid
-    wx.showLoading({
-      title: '加载中',
-    })
+    // wx.showLoading({
+    //   title: '加载中',
+    // })
     wx.login({
       success: function (res) {
         console.log(res);
