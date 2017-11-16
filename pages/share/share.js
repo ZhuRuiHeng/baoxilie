@@ -20,16 +20,26 @@ Page({
     let that = this;
     console.log(options);
     let bg_id = wx.getStorageSync("bg_id");
-    // if (options.bg_id) {  //有无bg_id
-    //   this.setData({
-    //     bg_id: options.red_id
-    //   })
-    //   bg_id: options.bg_id
-    // }
     that.setData({
       red_id: options.red_id,
       bg_id: bg_id
     })
+    // 转发
+    let scene = decodeURIComponent(options.scene);
+    if (options.scene) {
+      console.log('scene', scene);
+      var strs = new Array(); //定义一数组 
+      strs = scene.split("_"); //字符分割 
+      //console.log(strs);
+      console.log("red_id:", strs[1]);
+      that.setData({
+        red_id: strs[1]
+      })
+      wx.navigateTo({
+        url: '../inform/inform?red_id=' + that.data.red_id +'&sharefriends=1'
+      })
+    }
+
   },
 
   /**

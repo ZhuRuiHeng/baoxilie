@@ -75,6 +75,7 @@ Page({
   pay(e){
     
     let that = this;
+    let sign = wx.getStorageSync('sign');
     console.log("formId:", e.detail.formId);
     // 提现
     wx.request({

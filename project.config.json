@@ -45,13 +45,13 @@
 					"id": 3,
 					"name": "inform",
 					"pathName": "pages/inform/inform",
-					"query": "scene=packet_238"
+					"query": "red_id=227"
 				},
 				{
 					"id": 4,
 					"name": "share",
 					"pathName": "pages/share/share",
-					"query": "red_id=8&bg_id=77"
+					"query": "scene=_239"
 				},
 				{
 					"id": -1,

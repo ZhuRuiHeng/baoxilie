@@ -18,13 +18,14 @@ Page({
     pintu:false,
     decide:false, //拼字是否成功
     depintu:false, //拼图是否成功
-    clear:true
+    clear:true,
+    yuyin:'http://ws.stream.qqmusic.qq.com/M500001VfvsJ21xFqb.mp3?guid=ffffffff82def4af4b12b3cd9337d5e7&uin=346897220&vkey=6292F51E1E384E06DCBDC9AB7C49FD713D632D313AC4858BACB8DDD29067D3C601481D36E62053BF8DFEAF74C0A5CCFADD6471160CAF3E6A&fromtag=46',
+    star: false //播放
   },
   onReady: function (e) {
-    // 使用 wx.createAudioContext 获取 audio 上下文 context
-    this.audioCtx = wx.createAudioContext('myAudio')
-    this.audioCtx.setSrc('http://ws.stream.qqmusic.qq.com/M500001VfvsJ21xFqb.mp3?guid=ffffffff82def4af4b12b3cd9337d5e7&uin=346897220&vkey=6292F51E1E384E06DCBDC9AB7C49FD713D632D313AC4858BACB8DDD29067D3C601481D36E62053BF8DFEAF74C0A5CCFADD6471160CAF3E6A&fromtag=46')
-    // this.audioCtx.play()
+    let  yuyin = this.data.yuyin;
+    this.audioCtx = wx.createAudioContext('myAudio');
+    this.audioCtx.setSrc(yuyin)
   },
   /**
    * 生命周期函数--监听页面加载
@@ -32,13 +33,21 @@ Page({
   onLoad: function (options) {
     //回调
     let sign = wx.getStorageSync('sign');
-    
     common.getSign(function () {})
     console.log(options);
     let that = this;
     let userInfo = wx.getStorageSync('userInfo');
-    let scene = options.scene;
-    if (scene){
+    let scene = decodeURIComponent(options.scene);
+    let red_id = options.red_id;
+    if (red_id) {
+        that.setData({
+          userInfo: userInfo,
+          red_id: options.red_id
+        })
+    }
+    //参
+    if (options.scene){
+      console.log('scene', scene);
         var strs = new Array(); //定义一数组 
         strs = scene.split("_"); //字符分割 
         //console.log(strs);
@@ -48,18 +57,14 @@ Page({
           red_id: strs[1],
           sharefriends:1
         })
-    }else{
-      if (options.sharefriends){
-        that.setData({
-          sharefriends: options.sharefriends
-        })
-      }
+    }
+    if (options.sharefriends){
       that.setData({
-        userInfo: userInfo,
-        red_id: options.red_id
+        sharefriends: 1
       })
     }
-    console.log("sharefriends:",that.data.sharefriends);
+    // console.log("sharefriends:",that.data.sharefriends);
+    // console.log(options.red_id);
   },
   /**
    * 生命周期函数--监听页面显示
@@ -943,7 +948,7 @@ Page({
     console.log(e);
     let that = this;
     return {
-      title: '刷屏神器',
+      title: '',
       path: '/pages/inform/inform?red_id=' + that.data.red_id + '&sharefriends=1',
       success: function (res) {
         console.log(res);
@@ -955,11 +960,25 @@ Page({
       }
     }
   },
+  
   audioPlay: function (e) {
-    console.log(e,11111);
-    this.audioCtx.play()
+    console.log(e,111);
+    let that = this;
+    let yuyin = that.data.yuyin;
+    // 使用 wx.createAudioContext 获取 audio 上下文 context
+    console.log(yuyin, "yuyin:");
+    console.log("star:", that.data.star);
+    that.audioCtx.play();
+    that.setData({
+      //star: true
+    })
+  },
+  audioPause: function (e) {
+    let that = this;
+    console.log(e, 222);
+    that.audioCtx.pause();
+    that.setData({
+      star: false
+    })
   }
-  // audioPause: function () {
-  //   this.audioCtx.pause()
-  // }
 })

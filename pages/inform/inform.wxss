@@ -429,6 +429,18 @@ body{ min-height: 100vh; background-color: #f5f5f5; font-size: 15px; }
 .pic1,.pic4,.pic7{ left: 96px; }
 .pic2,.pic5,.pic8{ left: 192px; }
 audio{
-  width:140rpx;background:#f2f2f2;color:#626262;border:1px solid #ddd;border-radius:8rpx;height:60rpx;margin-left:10rpx;
+  width:140rpx;background:#f2f2f2;color:#626262;
+  border:1px solid #ddd;border-radius:8rpx;height:60rpx; margin-left:10rpx;
+}
+.audio{
+  width:50%;
+  background:#f2f2f2 url(http://ovhvevt35.bkt.clouddn.com/bao/voice.png) no-repeat center left;
+  background-size: 36rpx;
+  color:#626262;
+  border:1px solid #ddd;
+  border-radius:8rpx;
+  height:60rpx;
+  margin-left:10rpx;
+  position: relative;
 }
 
