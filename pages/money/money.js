@@ -36,6 +36,7 @@ Page({
         title: '加载中',
       });
       let that = this;
+      let sign = wx.getStorageSync('sign');
       // 提现
       wx.request({
         url: apiurl + "red/get-balance?sign=" + sign + '&operator_id=' + app.data.kid,

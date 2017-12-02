@@ -95,7 +95,20 @@ Page({
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
-  
-  }
+  onShareAppMessage: function (e) {
+    console.log(e);
+    let that = this;
+    return {
+      title: '',
+      path: '/pages/inform/inform?red_id=' + that.data.red_id + '&sharefriends=1',
+      success: function (res) {
+        console.log(res);
+        // 转发成功
+      },
+      fail: function (res) {
+        console.log(res);
+        // 转发失败
+      }
+    }
+  },
 })

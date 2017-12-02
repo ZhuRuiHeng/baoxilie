@@ -36,26 +36,15 @@ Page({
     common.getSign(function () {})
     console.log(options);
     let that = this;
+    app.getAuth(function(){
+      
+    })
     let userInfo = wx.getStorageSync('userInfo');
-    let scene = decodeURIComponent(options.scene);
     let red_id = options.red_id;
     if (red_id) {
         that.setData({
           userInfo: userInfo,
           red_id: options.red_id
-        })
-    }
-    //参
-    if (options.scene){
-      console.log('scene', scene);
-        var strs = new Array(); //定义一数组 
-        strs = scene.split("_"); //字符分割 
-        //console.log(strs);
-        console.log("red_id:", strs[1]);
-        that.setData({
-          serInfo: userInfo,
-          red_id: strs[1],
-          sharefriends:1
         })
     }
     if (options.sharefriends){
@@ -74,37 +63,40 @@ Page({
         title: '加载中',
       });
       let that = this;
-      let sign = wx.getStorageSync('sign');
-      wx.request({
-        url: apiurl + "red/red-detail?sign=" + sign + '&operator_id=' + app.data.kid,
-        data:{
-          red_id: that.data.red_id
-        },
-        header: {
-          'content-type': 'application/json'
-        },
-        method: "GET",
-        success: function (res) {
-          console.log("红包详情:", res);
-          var status = res.data.status;
-          if (status == 1) {
-            that.setData({
-              informList: res.data.data,
-              member_info: res.data.data.member_info,
-              receive_info: res.data.data.receive_info,
-              red_info: res.data.data.red_info,
-              red_status: res.data.data.red_status,
-              types: res.data.data.red_info.red_type,
-              count_down: res.data.data.red_info.count_down
-            })
-          } else {
-            tips.alert(res.data.msg);
+      app.getAuth(function(){
+        let sign = wx.getStorageSync('sign');
+        wx.request({
+          url: apiurl + "red/red-detail?sign=" + sign + '&operator_id=' + app.data.kid,
+          data: {
+            red_id: that.data.red_id
+          },
+          header: {
+            'content-type': 'application/json'
+          },
+          method: "GET",
+          success: function (res) {
+            console.log("红包详情:", res);
+            var status = res.data.status;
+            if (status == 1) {
+              that.setData({
+                informList: res.data.data,
+                member_info: res.data.data.member_info,
+                receive_info: res.data.data.receive_info,
+                red_info: res.data.data.red_info,
+                red_status: res.data.data.red_status,
+                types: res.data.data.red_info.red_type,
+                count_down: res.data.data.red_info.count_down
+              })
+            } else {
+              tips.alert(res.data.msg);
+            }
+
+            console.log("types", that.data.types);
           }
-         
-          console.log("types", that.data.types);
-        }
+        })
+        wx.hideLoading()
       })
-      wx.hideLoading()
+      
   },
   //判断是否有types 
   formSubmit: function (e) {
@@ -131,19 +123,19 @@ Page({
   },
   //提现
   money(e){
-    wx.navigateTo({
+    wx.switchTab({
       url: '../money/money'
     })
   },
   //send
   send(){
-    wx.navigateTo({
+    wx.switchTab({
       url: '../index/index'
     })
   },
   // 分享
   share(e){
-    wx.redirectTo({
+    wx.navigateTo({
       url: '../share/share?red_id=' + this.data.red_id
     })
   },

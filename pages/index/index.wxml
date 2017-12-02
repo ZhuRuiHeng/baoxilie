@@ -1,5 +1,12 @@
 <!--index.wxml-->
  <view class="container">
+      <view class="marquee">
+          <view class="content">
+              <text>{{broadcasting}}</text> <text style="display: inline-block; width: 5em;"></text>
+              <text>{{broadcasting}}</text> <text style="display: inline-block; width: 5em;"></text>
+              <text>{{broadcasting}}</text> <text style="display: inline-block; width: 5em;"></text>
+          </view>
+      </view>
   <view class="boxs {{animation == true?'animation':'default'}}">
       <view class="box" >
             <view class='logo'>
@@ -94,12 +101,12 @@
             </view>
       </view>
   </view>
-      <view class='bottom'>
+      <!-- <view class='bottom'>
           <view class='foot'>
               <navigator class='tab' wx:for="{{footList}}" url="{{item.url}}">
                   <image src="{{item.img}}" mode='widthFix'></image>
                   <view>{{item.title}}</view>
               </navigator> 
           </view>
-      </view>
+      </view> -->
 </view> 

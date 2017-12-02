@@ -19,6 +19,8 @@ Page({
     service:0,//服务费
     allmoney:'',//余额
     animation:false,
+    navto: 1,  //是否跳转启动页 1跳转 0 不跳转
+    broadcasting: '肌肤有困难？就找禾葡兰！千名专业美肤导师为你提供一对一服务，随时免费咨询，微信搜索小程序：禾葡兰护肤中心',
     typeP: [
       {
         title:'拼字红包',
@@ -63,8 +65,8 @@ Page({
         url: '../commonred/commonred'
       },{
         img: '../images/3.png',
-        title: '常见问题',
-        url: '../question/question'
+        title: '更多好玩',
+        url: '../more/more'
       },
     ],
     index: 0,
@@ -87,6 +89,8 @@ Page({
   },
   
   onLoad: function (options) {
+    wx.setStorageSync("navto", 1);
+    let userInfo = wx.getStorageSync("userInfo");
     let that = this;
     if (options.tempFilePaths){
         that.setData({
@@ -99,57 +103,99 @@ Page({
           style: style
       })
     }
+    //参
+    if (options.scene) {
+      let scene = decodeURIComponent(options.scene);
+      console.log('scene', scene);
+      var strs = new Array(); //定义一数组 
+      strs = scene.split("_"); //字符分割 
+      console.log(strs);
+      console.log("red_id:", strs[1]);
+      that.setData({
+        userInfo: userInfo,
+        red_id: strs[1],
+        sharefriends: 1
+      })
+      
+    }
     
-    
-    //回调
-    common.getSign(function () {})
   },
   onShow:function(){
-    wx.showLoading({
-      title: '加载中',
-    });
-    // 用户信息
-    let that = this;
-    let userInfo = wx.getStorageSync('userInfo');
-    let sign = wx.getStorageSync('sign');
-    that.setData({
-      userInfo: userInfo
-    })
-    // 提现
+    if (wx.getStorageSync("navto")) {
+      setTimeout(function () {
+        wx.navigateTo({
+          url: '../star/star'
+        })
+      }, 20)
+    }
+    
+    //滚动文字
     wx.request({
-      url: apiurl + "red/get-balance?sign=" + sign + '&operator_id=' + app.data.kid,
-      header: {
-        'content-type': 'application/json'
-      },
-      method: "GET",
+      url: "https://unify.playonweixin.com/site/get-advertisements",
       success: function (res) {
-        console.log("余额:", res);
-        var status = res.data.status;
-        if (status == 1) {
+        console.log(res);
+        if (res.data.status) {
+          var advers = res.data.adver.advers;
+          var head_adver = res.data.adver.head_adver;
+          var broadcasting = res.data.adver.broadcasting;
+          wx.setStorageSync("advers", advers);
+          wx.setStorageSync("broadcasting", broadcasting);
           that.setData({
-            allMoney: res.data.data
+            broadcasting
           })
-         
-        } else {
-          tips.alert(res.data.msg);
         }
       }
     })
-     //24h
-    let timestamp = wx.getStorageSync('timestamp');//时间戳
-    console.log("timestamp:",timestamp);
-    if (!timestamp){
+    // 用户信息
+    let that = this;
+    if (that.data.red_id) {
+      wx.navigateTo({
+        url: '../inform/inform?red_id=' + that.data.red_id
+      })
+    }
+    app.getAuth(function(){
+      let userInfo = wx.getStorageSync('userInfo');
       let sign = wx.getStorageSync('sign');
-      common.timestamp(function () {})
-    } else { //有timestamp
-      let nowtimestamp = Date.parse(new Date());
-      var d = (nowtimestamp - timestamp) / 1000;
-      console.log(d);
+      console.log(userInfo);
+      that.setData({
+        userInfo: userInfo
+      })
+      // 提现
+      wx.request({
+        url: apiurl + "red/get-balance?sign=" + sign + '&operator_id=' + app.data.kid,
+        header: {
+          'content-type': 'application/json'
+        },
+        method: "GET",
+        success: function (res) {
+          console.log("余额:", res);
+          var status = res.data.status;
+          if (status == 1) {
+            that.setData({
+              allMoney: res.data.data
+            })
+
+          } else {
+            tips.alert(res.data.msg);
+          }
+        }
+      })
+      //24h
+      let timestamp = wx.getStorageSync('timestamp');//时间戳
+      console.log("timestamp:", timestamp);
+      if (!timestamp) {
+        let sign = wx.getStorageSync('sign');
+        common.timestamp(function () { })
+      } else { //有timestamp
+        let nowtimestamp = Date.parse(new Date());
+        var d = (nowtimestamp - timestamp) / 1000;
+        console.log(d);
         if (d >= 86400) {
           common.timestamp(function () { })
         }
-    }
-    wx.hideLoading()
+      }
+    });
+    
   },
   // 红包玩法 true拼 false普
   play(){
@@ -347,8 +393,16 @@ Page({
                   that.setData({
                     monry1: '',
                     money2: '',
-                    num: ''
-                  }),
+                    num: '',
+                    marqueePace: 1,//滚动速度
+                    marqueeDistance: 0,//初始滚动距离
+                    marqueeDistance2: 0,
+                    marquee2copy_status: false,
+                    marquee2_margin: 60,
+                    size: 14,
+                    orientation: 'left',//滚动方向
+                    interval: 40, // 时间间隔
+                  })
                   // 余额支付成功跳转
                   wx.navigateTo({
                     url: '../inform/inform?red_id=' + res.data.data.finished
@@ -442,7 +496,15 @@ Page({
                         red_id: res.data.data,
                         monry1: '',
                         money2: '',
-                        num: ''
+                        num: '',
+                        marqueePace: 1,//滚动速度
+                        marqueeDistance: 0,//初始滚动距离
+                        marqueeDistance2: 0,
+                        marquee2copy_status: false,
+                        marquee2_margin: 60,
+                        size: 14,
+                        orientation: 'left',//滚动方向
+                        interval: 40, // 时间间隔
                       })
                     }
                   })
@@ -463,8 +525,16 @@ Page({
               that.setData({
                 monry1: '',
                 money2: '',
-                num: ''
-              }),
+                num: '',
+                marqueePace: 1,//滚动速度
+                marqueeDistance: 0,//初始滚动距离
+                marqueeDistance2: 0,
+                marquee2copy_status: false,
+                marquee2_margin: 60,
+                size: 14,
+                orientation: 'left',//滚动方向
+                interval: 40, // 时间间隔
+              })
                 // 余额支付成功跳转
                 wx.navigateTo({
                   url: '../inform/inform?red_id=' + res.data.data.finished
@@ -549,7 +619,15 @@ Page({
                         red_id: res.data.data,
                         monry1: '',
                         money2: '',
-                        num: ''
+                        num: '',
+                        marqueePace: 1,//滚动速度
+                        marqueeDistance: 0,//初始滚动距离
+                        marqueeDistance2: 0,
+                        marquee2copy_status: false,
+                        marquee2_margin: 60,
+                        size: 14,
+                        orientation: 'left',//滚动方向
+                        interval: 40, // 时间间隔
                       })
                     }
                   })
@@ -705,9 +783,16 @@ Page({
         word: "",
         money1: "",
         money2: "",
-        num: ''
+        num: '',
+        marqueePace: 1,//滚动速度
+        marqueeDistance: 0,//初始滚动距离
+        marqueeDistance2: 0,
+        marquee2copy_status: false,
+        marquee2_margin: 60,
+        size: 14,
+        orientation: 'left',//滚动方向
+        interval: 40 // 时间间隔
     })
-    //wx.setStorageSync('style', '');
   },
   //事件处理函数text
   bindPickerChange1: function (e) {
@@ -775,6 +860,16 @@ Page({
   },
   //事件处理函数niceimg
   seeImg: function () {
+    this.setData({
+      marqueePace: 1,//滚动速度
+      marqueeDistance: 0,//初始滚动距离
+      marqueeDistance2: 0,
+      marquee2copy_status: false,
+      marquee2_margin: 60,
+      size: 14,
+      orientation: 'left',//滚动方向
+      interval: 40 // 时间间隔
+    })
     wx.navigateTo({
       url: '../niceimg/niceimg'
     })

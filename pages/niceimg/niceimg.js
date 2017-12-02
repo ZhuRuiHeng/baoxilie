@@ -49,7 +49,7 @@ Page({
     let index = e.currentTarget.dataset.index;
     let tempFilePaths = e.currentTarget.dataset.url;
     console.log('tempFilePaths', e.currentTarget.dataset.url);
-    wx.navigateTo({
+    wx.switchTab({
       url: '../index/index?red_id=' + that.data.red_id + '&tempFilePaths=' + tempFilePaths
     })
   }

@@ -1,10 +1,5 @@
 // pages/star/star.js
-const app = getApp()
-const common = require('../../common.js');
-const apiurl = 'https://friend-guess.playonwechat.com/';
-let sign = wx.getStorageSync('sign');
-import tips from '../../utils/tips.js'
-modules: [];//模板
+var app = getApp();
 Page({
 
   /**
@@ -14,41 +9,37 @@ Page({
   
   },
 
+  /**
+   * 生命周期函数--监听页面加载
+   */
   onLoad: function (options) {
-      //回调
-      let that = this;
-      common.getSign(function() {})
-      setTimeout(function () {
-        wx.redirectTo({ 
-            url: '../index/index',
+    setTimeout(function () {
+        wx.switchTab({
+          url: '../index/index', 
+        })
+        wx.setStorageSync("navto", 0)
+    }, 3000)
+  },
+  onShow(){
+    let that = this;
+    let kid = wx.getStorageSync('kid')
+    wx.request({
+      url: "https://unify.playonweixin.com/site/get-advertisements",
+      success: function (res) {
+        console.log(res);
+        if (res.data.status) {
+          var advers = res.data.adver.advers;
+          var head_adver = res.data.adver.head_adver;
+          var broadcasting = res.data.adver.broadcasting;
+          wx.setStorageSync("advers", advers);
+          wx.setStorageSync("broadcasting", broadcasting);
+          that.setData({
+            head_adver
           })
-      }, 2500)
-    },
-    tap() {
-      wx.redirectTo({
-        url: '../index/index',
-      })
-    },
-    onShow(){
-      wx.request({
-        url: apiurl + "red/start-ad?sign=" + sign + '&operator_id=' + app.data.kid,
-        header: {
-          'content-type': 'application/json'
-        },
-        method: "GET",
-        success: function (res) {
-          console.log("adimg:", res);
-          var status = res.data.status;
-          if (status == 1) {
-            that.setData({
-              allMoney: res.data.data
-            })
-
-          } else {
-            //tips.alert(res.data.msg);
-          }
         }
-      })
-    }
+      }
+    })
+  }
+
 
 })

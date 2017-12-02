@@ -50,9 +50,6 @@ function getSign(cb){
                     success: function (res) {
                      // console.log("保存信息", res);
                       //that.data.authSuccess = true
-                      setTimeout(function () {
-                        wx.hideLoading()
-                      }, 500)
                     }
                   })
                 },

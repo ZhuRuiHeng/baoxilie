@@ -1,7 +1,8 @@
 {
   "pages":[
-    "pages/star/star",
     "pages/index/index",
+    "pages/star/star",
+    "pages/more/more",
     "pages/money/money",
     "pages/question/question",
     "pages/niceimg/niceimg",
@@ -10,7 +11,6 @@
     "pages/share/share",
     "pages/shareImg/shareImg",
     "pages/packet/packet",
-    "pages/demo/demo",
     "pages/commonred/commonred"
     
   ],
@@ -19,6 +19,38 @@
     "navigationBarBackgroundColor": "#d24d46",
     "navigationBarTitleText": "WeChat",
     "navigationBarTextStyle":"#fff"
+  },
+  "tabBar": {
+    "color": "#666",
+    "selectedColor": "#ff5656",
+    "backgroundColor": "#fff",
+    "borderStyle": "transparent",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "pages/images/home-icon.png",
+        "selectedIconPath": "pages/images/home-icon-active.png"
+      },
+      {
+        "pagePath": "pages/keep/keep",
+        "text": "我的记录",
+        "iconPath": "pages/images/1.png",
+        "selectedIconPath": "pages/images/1a.png"
+      },
+      {
+        "pagePath": "pages/money/money",
+        "text": "余额提现",
+        "iconPath": "pages/images/2.png",
+        "selectedIconPath": "pages/images/2a.png"
+      },
+      {
+        "pagePath": "pages/commonred/commonred",
+        "text": "公共红包",
+        "iconPath": "pages/images/3.png",
+        "selectedIconPath": "pages/images/3a.png"
+      }
+    ]
   }
  
 }

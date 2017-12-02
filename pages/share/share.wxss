@@ -10,6 +10,7 @@ page{
 }
 .content .avatarUrl image{
     width:100rpx;
+    height: 100rpx;
     border-radius: 50%;
     border:2px solid #fff;
     box-sizing: border-box;
@@ -29,6 +30,7 @@ page{
 }
 .content .question image{
     width: 200rpx;
+    height: 200rpx;
     border-radius: 50%;
     border:2px solid #f3dab2;
 }

@@ -12,44 +12,39 @@ App({
     authSuccess: false
   },
   onLaunch: function () {
-    const apiurl = 'https://friend-guess.playonwechat.com/';
+    
     let that = this;
-    //调用API从本地缓存中获取数据
-    let logs = wx.getStorageSync('logs') || [];
-    logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs);
     let extConfig = wx.getExtConfigSync ? wx.getExtConfigSync() : {};
     that.data.kid = extConfig.kid ? extConfig.kid : '123';
     //that.data.kid = 123; //123 464
     wx.setStorageSync('kid', that.data.kid); //that.data.kid
-    // wx.showLoading({
-    //   title: '加载中',
-    // })
+   this.getAuth();
+  },
+
+  getAuth(cb){
+    // var that = this;
+    const apiurl = 'https://friend-guess.playonwechat.com/';
+    let kid = wx.getStorageSync("kid");
     wx.login({
       success: function (res) {
         console.log(res);
         if (res.code) {
           //发起网络请求
           wx.request({
-            url: apiurl+'api/auth?code=' + res.code + '&operator_id=' + that.data.kid,
+            url: apiurl + 'api/auth?code=' + res.code + '&operator_id=' + kid,
             data: {
               code: res.code
             },
             success: function (res) {
-              console.log("成功");
               console.log(res);
-              console.log("sign:",res.data.data.sign);
-              that.data.sign = res.data.data.sign;
-              that.data.loginData = res.data.data.sign;
-              that.data.sharecode = res.data.data.sharecode;
+              console.log("sign:", res.data.data.sign);
+              var sign = res.data.data.sign;
               try {
-                wx.setStorageSync('sign', res.data.data.sign);
-                that.data.mobile = res.data.data.mobile;
-                that.data.mid = res.data.data.mid;
+                wx.setStorageSync('sign', sign);
                 wx.getUserInfo({
                   success: function (res) {
                     console.log("微信信息");
-                   // console.log(res);
+                    // console.log(res);
                     let userData = {};
                     let userInfo = res.userInfo
                     let nickName = userInfo.nickName
@@ -59,8 +54,6 @@ App({
                     let city = userInfo.city
                     let country = userInfo.country;
                     wx.setStorageSync('userInfo', userInfo);//缓存存用户信息
-                    that.data.username = nickName;
-                    that.data.avatarUrl = avatarUrl;
                     userData = {
                       nickName: nickName,
                       avatarUrl: avatarUrl,
@@ -70,17 +63,15 @@ App({
                       country: country
                     };
                     wx.request({
-                      url: apiurl + '/api/save-user-info?sign=' + that.data.sign + '&operator_id=' + that.data.kid,
+                      url: apiurl + '/api/save-user-info?sign=' + sign + '&operator_id=' + kid,
                       method: 'POST',
                       data: {
                         info: userData
                       },
                       success: function (res) {
-                        console.log("保存信息",res);
-                        that.data.authSuccess = true
-                        setTimeout(function () {
-                          wx.hideLoading()
-                        }, 500)
+                        console.log("保存信息", res);
+                        // that.data.authSuccess = true;
+                        typeof cb == "function" && cb();
                       }
                     })
                   },
